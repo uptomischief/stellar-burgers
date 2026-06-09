@@ -13,11 +13,14 @@ import {
 import styles from './app.module.css';
 
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
-// import { Preloader } from '@ui';
+import { Preloader } from '@ui';
 // import { useSelector } from 'react-redux';
 // import { getIngredientsLoading, getIngredientsError, getIngredients } from '@selectors';
 import { ProtectedRoute } from '../protected-route';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { getIngredients } from '../../services/slices/ingredientsSlice';
 
 const App = () => {
   /** TODO: взять переменные из стора */
@@ -28,6 +31,15 @@ const App = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getIngredients());
+  }, [dispatch]);
+
+  const isLoading = useSelector((state) => state.ingredients.loading);
+  const error = useSelector((state) => state.ingredients.error);
 
   const handleModalClose = () => {
     navigate(-1);
@@ -55,118 +67,133 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes location={background || location}>
-        <Route path='/' element={<ConstructorPage />} />
-        <Route path='/feed' element={<Feed />} />
-        <Route
-          path='/login'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <Login />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/register'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <Register />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/forgot-password'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <ForgotPassword />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/reset-password'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <ResetPassword />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/profile'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/profile/orders'
-          element={
-            <ProtectedRoute onlyUnAuth>
-              <ProfileOrders />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/feed/:number'
-          element={
-            <div className={styles.detailPageWrap}>
-              <OrderInfo />
-            </div>
-          }
-        />
-        <Route
-          path='/ingredients/:id'
-          element={
-            <div className={styles.detailPageWrap}>
-              <p className={`text text_type_main-large${styles.detailHeader}`}>
-                Детали ингредиента
-              </p>
-              <IngredientDetails />
-            </div>
-          }
-        />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <div className={styles.detailPageWrap}>
-                <OrderInfo />
-              </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route path='*' element={<NotFound404 />} />
-      </Routes>
-
-      {background && (
-        <Routes>
-          <Route
-            path='/feed/:number'
-            element={
-              <Modal onClose={handleModalClose} title='Информация о заказе'>
-                <OrderInfo />
-              </Modal>
-            }
-          />
-          <Route
-            path='/ingredients/:id'
-            element={
-              <Modal onClose={handleModalClose} title='Детали ингредиента'>
-                <IngredientDetails />
-              </Modal>
-            }
-          />
-          <Route
-            path='/profile/orders/:number'
-            element={
-              <ProtectedRoute>
-                <Modal onClose={handleModalClose} title='Информация о заказе'>
+      {isLoading ? (
+        <Preloader />
+      ) : error ? (
+        <div className={`${styles.error} text text_type_main-medium pt-4`}>
+          {error}
+        </div>
+      ) : (
+        <>
+          <Routes location={background || location}>
+            <Route path='/' element={<ConstructorPage />} />
+            <Route path='/feed' element={<Feed />} />
+            <Route
+              path='/login'
+              element={
+                <ProtectedRoute onlyUnAuth>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/register'
+              element={
+                <ProtectedRoute onlyUnAuth>
+                  <Register />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/forgot-password'
+              element={
+                <ProtectedRoute onlyUnAuth>
+                  <ForgotPassword />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/reset-password'
+              element={
+                <ProtectedRoute onlyUnAuth>
+                  <ResetPassword />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/profile'
+              element={
+                <ProtectedRoute onlyUnAuth>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/profile/orders'
+              element={
+                <ProtectedRoute onlyUnAuth>
+                  <ProfileOrders />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/feed/:number'
+              element={
+                <div className={styles.detailPageWrap}>
                   <OrderInfo />
-                </Modal>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+                </div>
+              }
+            />
+            <Route
+              path='/ingredients/:id'
+              element={
+                <div className={styles.detailPageWrap}>
+                  <p
+                    className={`text text_type_main-large${styles.detailHeader}`}
+                  >
+                    Детали ингредиента
+                  </p>
+                  <IngredientDetails />
+                </div>
+              }
+            />
+            <Route
+              path='/profile/orders/:number'
+              element={
+                <ProtectedRoute>
+                  <div className={styles.detailPageWrap}>
+                    <OrderInfo />
+                  </div>
+                </ProtectedRoute>
+              }
+            />
+            <Route path='*' element={<NotFound404 />} />
+          </Routes>
+
+          {background && (
+            <Routes>
+              <Route
+                path='/feed/:number'
+                element={
+                  <Modal onClose={handleModalClose} title='Информация о заказе'>
+                    <OrderInfo />
+                  </Modal>
+                }
+              />
+              <Route
+                path='/ingredients/:id'
+                element={
+                  <Modal onClose={handleModalClose} title='Детали ингредиента'>
+                    <IngredientDetails />
+                  </Modal>
+                }
+              />
+              <Route
+                path='/profile/orders/:number'
+                element={
+                  <ProtectedRoute>
+                    <Modal
+                      onClose={handleModalClose}
+                      title='Информация о заказе'
+                    >
+                      <OrderInfo />
+                    </Modal>
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          )}
+        </>
       )}
     </div>
   );
