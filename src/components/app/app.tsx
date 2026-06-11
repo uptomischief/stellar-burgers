@@ -20,7 +20,9 @@ import { ProtectedRoute } from '../protected-route';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from '../../services/store';
-import { getIngredients } from '../../services/slices/ingredientsSlice';
+import { getIngredients } from '@slices';
+import { getUser, authChecked } from '@slices';
+import { getCookie } from '../../utils/cookie';
 
 const App = () => {
   /** TODO: взять переменные из стора */
@@ -36,6 +38,13 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
+
+    const token = getCookie('accessToken');
+    if (token) {
+      dispatch(getUser());
+    } else {
+      dispatch(authChecked());
+    }
   }, [dispatch]);
 
   const isLoading = useSelector((state) => state.ingredients.loading);
@@ -113,7 +122,7 @@ const App = () => {
             <Route
               path='/profile'
               element={
-                <ProtectedRoute onlyUnAuth>
+                <ProtectedRoute>
                   <Profile />
                 </ProtectedRoute>
               }
@@ -121,7 +130,7 @@ const App = () => {
             <Route
               path='/profile/orders'
               element={
-                <ProtectedRoute onlyUnAuth>
+                <ProtectedRoute>
                   <ProfileOrders />
                 </ProtectedRoute>
               }
