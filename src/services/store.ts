@@ -8,8 +8,6 @@ import {
 
 import { rootReducer } from './RootReducer';
 
-// const rootReducer = () => {}; // Заменить на импорт настоящего редьюсера
-
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production'

@@ -9,13 +9,10 @@ import {
   ProfileOrders,
   NotFound404
 } from '@pages';
-// import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, Modal, OrderInfo, IngredientDetails } from '@components';
 import { Preloader } from '@ui';
-// import { useSelector } from 'react-redux';
-// import { getIngredientsLoading, getIngredientsError, getIngredients } from '@selectors';
 import { ProtectedRoute } from '../protected-route';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -25,11 +22,6 @@ import { getUser, authChecked } from '@slices';
 import { getCookie } from '../../utils/cookie';
 
 const App = () => {
-  /** TODO: взять переменные из стора */
-  // const isIngredientsLoading = false;
-  // const ingredients = [];
-  // const error = null;
-
   const location = useLocation();
   const navigate = useNavigate();
   const background = location.state?.background;
@@ -53,25 +45,6 @@ const App = () => {
   const handleModalClose = () => {
     navigate(-1);
   };
-
-  // return (
-  //   <div className={styles.app}>
-  //     <AppHeader />
-  //     {isIngredientsLoading ? (
-  //       <Preloader />
-  //     ) : error ? (
-  //       <div className={`${styles.error} text text_type_main-medium pt-4`}>
-  //         {error}
-  //       </div>
-  //     ) : ingredients.length > 0 ? (
-  //       <ConstructorPage />
-  //     ) : (
-  //       <div className={`${styles.title} text text_type_main-medium pt-4`}>
-  //         Нет игредиентов
-  //       </div>
-  //     )}
-  //   </div>
-  // );
 
   return (
     <div className={styles.app}>

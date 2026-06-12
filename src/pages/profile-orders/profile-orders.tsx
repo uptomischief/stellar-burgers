@@ -7,10 +7,7 @@ import { getOrders } from '../../services/slices/ordersSlice';
 import { Preloader } from '@ui';
 
 export const ProfileOrders: FC = () => {
-  /** TODO: взять переменную из стора */
   const dispatch = useDispatch();
-  // const orders: TOrder[] = [];
-  // const orders: any[] = [];
   const orders = useSelector((state) => state.orders.orders);
   const loading = useSelector((state) => state.orders.loading);
 

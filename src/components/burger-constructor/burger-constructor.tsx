@@ -11,7 +11,6 @@ import {
 import { createOrder, clearOrder } from '../../services/slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -19,15 +18,6 @@ export const BurgerConstructor: FC = () => {
     bun: state.burgerConstructor?.bun || null,
     ingredients: state.burgerConstructor?.ingredients || []
   }));
-
-  // const constructorItems = {
-  //   bun: null as null | {
-  //     price: number;
-  //     name: string;
-  //     image_mobile: string;
-  //   },
-  //   ingredients: [] as TConstructorIngredient[]
-  // };
 
   const orderRequest = useSelector((state) => state.order.orderRequest);
 
@@ -68,8 +58,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
-  // return null;
 
   return (
     <BurgerConstructorUI

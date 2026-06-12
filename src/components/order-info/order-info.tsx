@@ -10,23 +10,9 @@ import {
 } from '../../services/slices/ordersSlice';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
   const { number } = useParams();
   const dispatch = useDispatch();
-
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
-
   const orderData = useSelector((state) => state.orders.currentOrder);
-
-  // const ingredients: TIngredient[] = [];
 
   const ingredients = useSelector((state) => state.ingredients.ingredients);
 
@@ -41,7 +27,6 @@ export const OrderInfo: FC = () => {
     };
   }, [dispatch, number]);
 
-  /* Готовим данные для отображения */
   const orderInfo = useMemo(() => {
     if (!orderData || !ingredients.length || !orderData.ingredients)
       return null;
@@ -82,7 +67,6 @@ export const OrderInfo: FC = () => {
     const { ingredients: _, ...orderDataWithoutIngredients } = orderData;
 
     return {
-      // ...orderData,
       ...orderDataWithoutIngredients,
       ingredients: orderData.ingredients,
       ingredientsInfo,
