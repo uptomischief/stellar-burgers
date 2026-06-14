@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { FeedInfoUI } from '../ui/feed-info';
 import { useSelector } from '../../services/store';
+import { TOrder } from '@utils-types';
 
-const getOrders = (orders: any[], status: string): number[] =>
+const getOrders = (orders: TOrder[], status: string): number[] =>
   orders
     .filter((item) => item.status === status)
     .map((item) => item.number)

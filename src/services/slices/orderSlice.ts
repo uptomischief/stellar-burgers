@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { orderBurgerApi } from '@api';
+// import { clearConstructor } from './constructorSlice';
 
 export const createOrder = createAsyncThunk(
   'order/createOrder',

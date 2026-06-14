@@ -14,8 +14,11 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const constructorItems = useSelector((state) => ({
-    bun: state.burgerConstructor?.bun || null,
+  const constructorItems: {
+    bun: TConstructorIngredient | null;
+    ingredients: TConstructorIngredient[];
+  } = useSelector((state) => ({
+    bun: state.burgerConstructor?.bun as TConstructorIngredient | null,
     ingredients: state.burgerConstructor?.ingredients || []
   }));
 
@@ -38,11 +41,15 @@ export const BurgerConstructor: FC = () => {
       ...constructorItems.ingredients.map((i: TConstructorIngredient) => i._id),
       constructorItems.bun._id
     ];
-    dispatch(createOrder(ingredients));
+    dispatch(createOrder(ingredients))
+      .unwrap()
+      .then(() => {
+        dispatch(clearConstructor());
+      });
   };
+
   const closeOrderModal = () => {
     dispatch(clearOrder());
-    dispatch(clearConstructor());
   };
 
   const onDeleteIngredient = (index: number) => {
@@ -63,7 +70,7 @@ export const BurgerConstructor: FC = () => {
     <BurgerConstructorUI
       price={price}
       orderRequest={orderRequest}
-      constructorItems={constructorItems as any}
+      constructorItems={constructorItems}
       orderModalData={orderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
