@@ -23,7 +23,7 @@ export type TOrder = {
   createdAt: string;
   updatedAt: string;
   number: number;
-  ingredients: string[];
+  ingredients?: string[];
 };
 
 export type TOrdersData = {
