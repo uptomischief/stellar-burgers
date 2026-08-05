@@ -23,7 +23,7 @@ test.describe('Страница конструктора бургера', () => 
       await bunSection.locator('button:has-text("Добавить")').click();
 
       const constructorTopBun = page
-        .locator('[class*="constructor"], [class*="element"]')
+        .locator('[class*="element"]')
         .filter({ hasText: /Краторная булка N-200i.*верх/ })
         .first();
       await expect(constructorTopBun).toBeVisible();
@@ -36,7 +36,7 @@ test.describe('Страница конструктора бургера', () => 
       await mainSection.locator('button:has-text("Добавить")').click();
 
       const constructorMain = page
-        .locator('[class*="constructor"], [class*="elements"]')
+        .locator('[class*="elements"]')
         .filter({ hasText: 'Биокотлета из марсианской Магнолии' })
         .first();
       await expect(constructorMain).toBeVisible();
@@ -49,13 +49,13 @@ test.describe('Страница конструктора бургера', () => 
       await sauceSection.locator('button:has-text("Добавить")').click();
 
       const constructorSauce = page
-        .locator('[class*="constructor"], [class*="elements"]')
+        .locator('[class*="elements"]')
         .filter({ hasText: 'Соус Spicy-X' })
         .first();
       await expect(constructorSauce).toBeVisible();
 
       const constructorBottomBun = page
-        .locator('[class*="constructor"], [class*="element"]')
+        .locator('[class*="element"]')
         .filter({ hasText: /Краторная булка N-200i.*низ/ })
         .first();
       await expect(constructorBottomBun).toBeVisible();
@@ -246,25 +246,25 @@ test.describe('Создание заказа', () => {
 
     await expect(
       page
-        .locator('[class*="constructor"], [class*="element"]')
+        .locator('[class*="element"]')
         .filter({ hasText: /Краторная булка N-200i.*верх/ })
         .first()
     ).toBeVisible();
     await expect(
       page
-        .locator('[class*="constructor"], [class*="element"]')
+        .locator('[class*="element"]')
         .filter({ hasText: 'Биокотлета из марсианской Магнолии' })
         .first()
     ).toBeVisible();
     await expect(
       page
-        .locator('[class*="constructor"], [class*="element"]')
+        .locator('[class*="element"]')
         .filter({ hasText: 'Соус Spicy-X' })
         .first()
     ).toBeVisible();
     await expect(
       page
-        .locator('[class*="constructor"], [class*="element"]')
+        .locator('[class*="element"]')
         .filter({ hasText: /Краторная булка N-200i.*низ/ })
         .first()
     ).toBeVisible();
@@ -284,7 +284,8 @@ test.describe('Создание заказа', () => {
     await closeButton.click();
     await expect(orderModal).not.toBeVisible();
 
-    await expect(page.locator('text=Выберите булки').first()).toBeVisible();
-    await expect(page.locator('text=Выберите начинку').first()).toBeVisible();
+    const constructorContainer = page.locator('[class*=*constructor]').first();
+    await expect(constructorContainer.locator('text=Выберите булки').first()).toBeVisible();
+    await expect(constructorContainer.locator('text=Выберите начинку').first()).toBeVisible();
   });
 });
